@@ -135,20 +135,19 @@ contract Lottery is Ownable {
     function prizeWithdraw(uint256 amount) external {
         require(amount <= prize[msg.sender], "Not enough prize");
         prize[msg.sender] -= amount;
-        // TODO
+        paymentToken.transferFrom(address(this), msg.sender, amount);
     }
 
     /// @notice Withdraws `amount` from the owner's pool
     function ownerWithdraw(uint256 amount) external onlyOwner {
         require(amount <= ownerPool, "Not enough fees collected");
         ownerPool -= amount;
-        // TODO
+        payable(msg.sender).transfer(amount / purchaseRatio);
     }
 
     /// @notice Burns `amount` tokens and give the equivalent ETH back to user
     function returnTokens(uint256 amount) external {
-        // approve
         paymentToken.burnFrom(msg.sender, amount);
-        // TODO
+        payable(msg.sender).transfer(amount / purchaseRatio);
     }
 }
