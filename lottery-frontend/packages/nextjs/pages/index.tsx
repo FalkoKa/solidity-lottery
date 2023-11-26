@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount, useNetwork } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { Lottery } from "~~/components/Lottery";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { TokenInfo } from "~~/components/TokenInfo";
 import { WalletInfo } from "~~/components/WalletInfo";
@@ -20,14 +21,21 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Group 8's Ballot Contract Frontend</span>
+            <span className="block text-4xl font-bold">Lottery</span>
           </h1>
         </div>
         {isDisconnected && <div>Wallet disconnected. Connect wallet to continue</div>}
         {!isConnecting ? (
-          <div className="grid gap-3">
+          <div className="grid gap-3 w-[60%]">
             {address && chain && <WalletInfo address={address as `0x${string}`} chain={chain} />}
-            {address && <TokenInfo address={address as `0x${string}`} tokenAddress={lotteryTokenAddress} />}
+            {address && (
+              <TokenInfo
+                address={address as `0x${string}`}
+                lotteryContractAddress={lotteryContractAddress}
+                tokenAddress={lotteryTokenAddress}
+              />
+            )}
+            {address && <Lottery address={address} lotteryContractAddress={lotteryContractAddress} />}
           </div>
         ) : (
           <div>
